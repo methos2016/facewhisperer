@@ -84,7 +84,10 @@ e-mail   :  support@circuitsathome.com
 // No user serviceable parts below this line.
 // DO NOT change anything below here unless you are a developer!
 
+#ifndef HAL_TYPE
+ // Arduino fixups, disabled for ChipWhisperer builds
 #include "version_helper.h"
+#endif
 
 #if defined(__GNUC__) && defined(__AVR__)
 #ifndef GCC_VERSION

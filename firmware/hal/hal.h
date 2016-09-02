@@ -19,6 +19,10 @@
 #ifndef HAL_H_
 #define HAL_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void platform_init(void);
 
 //PLATFORM Define Types
@@ -67,7 +71,6 @@ void platform_init(void);
                                   \
                                 AES_CTRL |= 1<<AES_REQUEST; \
                                   \
-                                //Wait for done \
                                 while ((AES_STATUS & (1<<AES_DONE)) == 0){ \
                                     ; \
                                 } \
@@ -85,6 +88,10 @@ void platform_init(void);
 
 #ifndef led_ok
 #define led_ok(a)
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif //HAL_H_
