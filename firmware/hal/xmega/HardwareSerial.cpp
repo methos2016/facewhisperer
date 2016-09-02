@@ -218,26 +218,26 @@ HardwareSerial name (&name##rx_buffer, &USART##usart_port##port_nr, &PORT##usart
   void serialEvent() {}
   #define serialEvent_implemented
 #endif
-#if defined(USARTC1_RXC_vect)
+// #if defined(USARTC1_RXC_vect)
+//   void serialEvent1() __attribute__((weak));
+//   void serialEvent1() {}
+//   #define serialEvent1_implemented
+// #endif
+#if defined(USARTD0_RXC_vect)
   void serialEvent1() __attribute__((weak));
   void serialEvent1() {}
   #define serialEvent1_implemented
 #endif
-#if defined(USARTD0_RXC_vect)
-  void serialEvent2() __attribute__((weak));
-  void serialEvent2() {}
-  #define serialEvent2_implemented
-#endif
-#if defined(USARTD1_RXC_vect)
-  void serialEvent3() __attribute__((weak));
-  void serialEvent3() {}
-  #define serialEvent3_implemented
-#endif
-#if defined(USARTE0_RXC_vect)
-  void serialEvent4() __attribute__((weak));
-  void serialEvent4() {}
-  #define serialEvent4_implemented
-#endif
+// #if defined(USARTD1_RXC_vect)
+//   void serialEvent3() __attribute__((weak));
+//   void serialEvent3() {}
+//   #define serialEvent3_implemented
+// #endif
+// #if defined(USARTE0_RXC_vect)
+//   void serialEvent4() __attribute__((weak));
+//   void serialEvent4() {}
+//   #define serialEvent4_implemented
+// #endif
 /*
 #if defined(USARTE1_RXC_vect)
   void serialEvent5() __attribute__((weak));

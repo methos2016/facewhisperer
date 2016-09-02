@@ -11,6 +11,9 @@ int main()
 	platform_init();
 	init_uart();
 	trigger_setup();
+
+	Serial.print("Does this work?");
+
 	Usb.Task();
 
 	while (1) {

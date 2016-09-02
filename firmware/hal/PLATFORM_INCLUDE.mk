@@ -20,7 +20,7 @@ ifeq ($(HAL),xmega)
  VPATH=$(HALPATH)/xmega $(HALPATH)/usbhost
  EXTRAINCDIRS += $(HALPATH)/xmega $(HALPATH)/usbhost
  HALSRC = XMEGA_AES_driver.c uart.c usart_driver.c xmega_hal.c wiring.c wiring_digital.c WInterrupts.c
- USBSRC = Usb.cpp SPI.cpp new.cpp
+ HALCPPSRC = Usb.cpp SPI.cpp HardwareSerial.cpp Print.cpp WString.cpp new.cpp
 else
  $(error: Unknown HAL: $(HAL))
 endif

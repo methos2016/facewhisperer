@@ -65,7 +65,7 @@ OBJDIR = objdir
 SRC = $(HALSRC)
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = $(TARGET).cpp $(USBSRC)
+CPPSRC = $(TARGET).cpp $(HALCPPSRC)
 
 
 # List Assembler source files here.
