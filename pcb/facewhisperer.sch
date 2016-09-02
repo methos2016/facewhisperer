@@ -7309,6 +7309,7 @@ Resettable Fuse. Spark Fun Electronics SKU : COM-08357</description>
 <sheet>
 <plain>
 <text x="270.256" y="144.018" size="2.1844" layer="94" font="fixed">scanlime</text>
+<text x="338.836" y="141.478" size="2.1844" layer="94" font="fixed">A</text>
 </plain>
 <instances>
 <instance part="IC1" gate="G$1" x="231.14" y="248.92"/>
