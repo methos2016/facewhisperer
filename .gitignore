@@ -42,3 +42,11 @@ eagle.epf
 # file locks introduced since 7.x
 *.lck
 
+.dep/
+objdir/
+*.eep
+*.elf
+*.map
+*.sym
+*.lss
+*.hex
