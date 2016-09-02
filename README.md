@@ -9,9 +9,9 @@ The experiments are scripted from an ATxmega128 processor, same as the one inclu
 
 For keeping the target device in sync, this board provides a 12 MHz clock output and an open-collector reset output.
 
-This is a quick hack that builds on the work of several great projects:
+This is a quick hack that builds on the work and inspiration of several great projects:
 
 - [GoodFET](http://goodfet.sourceforge.net)
 - [ChipWhisperer](https://newae.com/tools/chipwhisperer)
+- [Xmegaduino](https://github.com/Xmegaduino/Xmegaduino)
 - [Arduino USB Host Shield library](https://github.com/felis/USB_Host_Shield_2.0)
-

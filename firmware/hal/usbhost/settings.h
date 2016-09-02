@@ -138,7 +138,7 @@ e-mail   :  support@circuitsathome.com
 #define USING_SPI4TEENSY3 0
 #endif
 
-#if ((defined(ARDUINO_SAM_DUE) && defined(__SAM3X8E__)) || defined(__ARDUINO_X86__) || ARDUINO >= 10600) && !USING_SPI4TEENSY3
+#if ((defined(ARDUINO_SAM_DUE) && defined(__SAM3X8E__)) || defined(__AVR_XMEGA__) || defined(__ARDUINO_X86__) || ARDUINO >= 10600) && !USING_SPI4TEENSY3
 #include <SPI.h> // Use the Arduino SPI library for the Arduino Due, Intel Galileo 1 & 2, Intel Edison or if the SPI library with transaction is available
 #endif
 #ifdef RBL_NRF51822

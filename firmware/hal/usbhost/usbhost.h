@@ -85,7 +85,7 @@ public:
 };
 
 /* SPI pin definitions. see avrpins.h   */
-#if defined(__AVR_ATmega1280__) || (__AVR_ATmega2560__) || defined(__AVR_ATmega32U4__) || defined(__AVR_AT90USB646__) || defined(__AVR_AT90USB1286__)
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega32U4__) || defined(__AVR_AT90USB646__) || defined(__AVR_AT90USB1286__)
 typedef SPi< Pb1, Pb2, Pb3, Pb0 > spi;
 #elif  defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
 typedef SPi< Pb5, Pb3, Pb4, Pb2 > spi;
@@ -97,6 +97,8 @@ typedef SPi< P13, P11, P12, P10 > spi;
 typedef SPi< P76, P75, P74, P10 > spi;
 #elif defined(RBL_NRF51822)
 typedef SPi< P16, P18, P17, P10 > spi;
+#elif defined(BOARD_FACEWHISPERER)
+typedef SPi< P21, P10, P20, P9 > spi;
 #else
 #error "No SPI entry in usbhost.h"
 #endif
@@ -172,7 +174,7 @@ void MAX3421e< SPI_SS, INTR >::regWr(uint8_t reg, uint8_t data) {
         c[0] = reg | 0x02;
         c[1] = data;
         HAL_SPI_Transmit(&SPI_Handle, c, 2, HAL_MAX_DELAY);
-#elif !defined(SPDR)
+#elif !defined(SPDR) || defined(__AVR_XMEGA__)
         SPI.transfer(reg | 0x02);
         SPI.transfer(data);
 #else
@@ -217,7 +219,7 @@ uint8_t* MAX3421e< SPI_SS, INTR >::bytesWr(uint8_t reg, uint8_t nbytes, uint8_t*
         HAL_SPI_Transmit(&SPI_Handle, &data, 1, HAL_MAX_DELAY);
         HAL_SPI_Transmit(&SPI_Handle, data_p, nbytes, HAL_MAX_DELAY);
         data_p += nbytes;
-#elif !defined(SPDR)
+#elif !defined(SPDR) || defined(__AVR_XMEGA__)
         SPI.transfer(reg | 0x02);
         while(nbytes) {
                 SPI.transfer(*data_p);
@@ -272,7 +274,7 @@ uint8_t MAX3421e< SPI_SS, INTR >::regRd(uint8_t reg) {
         uint8_t rv = 0;
         HAL_SPI_Receive(&SPI_Handle, &rv, 1, HAL_MAX_DELAY);
         SPI_SS::Set();
-#elif !defined(SPDR) || SPI_HAS_TRANSACTION
+#elif !defined(SPDR) || defined(__AVR_XMEGA__)
         SPI.transfer(reg);
         uint8_t rv = SPI.transfer(0); // Send empty byte
         SPI_SS::Set();
@@ -320,7 +322,7 @@ uint8_t* MAX3421e< SPI_SS, INTR >::bytesRd(uint8_t reg, uint8_t nbytes, uint8_t*
         memset(data_p, 0, nbytes); // Make sure we send out empty bytes
         HAL_SPI_Receive(&SPI_Handle, data_p, nbytes, HAL_MAX_DELAY);
         data_p += nbytes;
-#elif !defined(SPDR)
+#elif !defined(SPDR) || defined(__AVR_XMEGA__)
         SPI.transfer(reg);
         while(nbytes) {
             *data_p++ = SPI.transfer(0);

@@ -1,7 +1,7 @@
 # Hey Emacs, this is a -*- makefile -*-
 #----------------------------------------------------------------------------
 #
-# Makefile for ChipWhisperer SimpleSerial-AES Program
+# Makefile for ChipWhisperer victim firmwares
 #
 #----------------------------------------------------------------------------
 # On command line:
@@ -30,26 +30,21 @@
 
 ######### Specify your platform here
 
-#Multi-Target Board, AVR Device (ATMega328P)
-#PLATFORM = CW301_AVR
-
 #Multi-Target Board, XMEGA Device
 #PLATFORM = CW301_XMEGA
 
 #CW-Lite XMEGA Target Device (XMEGA128D4)
-PLATFORM = CW303
+#PLATFORM = CW303
 
-#NOTDUINO Kit (ATMega328P)
-#PLATFORM = CW304
+#Facewhisperer USB host
+PLATFORM = FACEWHISPERER
 
 # Processor frequency.
 #     This will define a symbol, F_CPU, in all source code files equal to the 
 #     processor frequency. You can then use this symbol in your source code to 
 #     calculate timings. Do NOT tack on a 'UL' at the end, this will be done
 #     automatically to create a 32-bit value in your source code.
-F_CPU = 7372800
-#F_CPU = 2000000
-#F_CPU = 16000000
+F_CPU = 12000000
 
 #Pull in require files
 HALPATH = ../hal

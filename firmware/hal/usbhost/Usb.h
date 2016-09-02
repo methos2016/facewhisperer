@@ -23,6 +23,8 @@ e-mail   :  support@circuitsathome.com
 #include <stddef.h>
 #include <stdio.h>
 
+#include "Arduino.h"
+
 // None of these should ever be included by a driver, or a user's sketch.
 #include "settings.h"
 #include "printhex.h"

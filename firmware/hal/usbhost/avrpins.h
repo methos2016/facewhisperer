@@ -22,7 +22,75 @@ e-mail   :  support@circuitsathome.com
 #else
 #define _avrpins_h_
 
-#if defined(__AVR__)
+#if defined(__AVR_XMEGA__)
+
+// SetDirRead:
+//   Disable interrupts
+//   Disable the pull up resistor
+//   Set to INPUT
+//   Enable PIO
+
+// SetDirWrite:
+//   Disable interrupts
+//   Disable the pull up resistor
+//   Set to OUTPUT
+//   Enable PIO
+
+#define MAKE_PIN(className, pio, pin) \
+class className { \
+public: \
+  static void Set() { \
+    pio.OUTSET = 1 << pin; \
+  } \
+  static void Clear() { \
+    pio.OUTCLR = 1 << pin; \
+  } \
+  static void SetDirRead() { \
+    uint8_t* pinctrl = (uint8_t*)&pio.PIN0CTRL; \
+    pio.DIRCLR = 1 << pin; \
+    pinctrl[pin] &= ~PORT_OPC_gm; \
+  } \
+  static void SetDirWrite() { \
+    uint8_t* pinctrl = (uint8_t*)&pio.PIN0CTRL; \
+    pio.DIRSET = 1 << pin; \
+    pinctrl[pin] &= ~PORT_OPC_gm; \
+  } \
+  static uint8_t IsSet() { \
+    return pio.IN & (1 << pin); \
+  } \
+};
+
+MAKE_PIN(P0,  PORTC, 2);
+MAKE_PIN(P1,  PORTC, 3);
+MAKE_PIN(P2,  PORTC, 0);
+MAKE_PIN(P3,  PORTC, 1);
+MAKE_PIN(P4,  PORTD, 2);
+MAKE_PIN(P5,  PORTD, 3);
+MAKE_PIN(P6,  PORTD, 4);
+MAKE_PIN(P7,  PORTB, 2);
+MAKE_PIN(P8,  PORTB, 3);
+MAKE_PIN(P9,  PORTC, 4);
+MAKE_PIN(P10, PORTC, 5);
+MAKE_PIN(P11, PORTD, 5);
+MAKE_PIN(P12, PORTD, 6);
+MAKE_PIN(P13, PORTD, 7);
+MAKE_PIN(P14, PORTE, 0);
+MAKE_PIN(P15, PORTE, 1);
+MAKE_PIN(P16, PORTE, 2);
+MAKE_PIN(P17, PORTE, 3);
+MAKE_PIN(P18, PORTD, 0);
+MAKE_PIN(P19, PORTD, 1);
+MAKE_PIN(P20, PORTC, 6);
+MAKE_PIN(P21, PORTC, 7);
+MAKE_PIN(P22, PORTA, 1);
+MAKE_PIN(P23, PORTA, 2);
+MAKE_PIN(P24, PORTA, 3);
+MAKE_PIN(P25, PORTA, 4);
+MAKE_PIN(P26, PORTA, 5);
+MAKE_PIN(P27, PORTA, 6);
+// XMEGA, Akafuino variant
+
+#elif defined(__AVR__)
 
 // pointers are 16 bits on AVR
 #define pgm_read_pointer(p) pgm_read_word(p)

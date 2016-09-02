@@ -13,7 +13,7 @@ int main()
 	trigger_setup();
 	Usb.Task();
 
-	while () {
+	while (1) {
 		trigger_high();
 		trigger_low();
 	}
