@@ -27,6 +27,7 @@ void platform_init(void);
 #define CW303 3
 #define CW304 4
 #define CW308_MEGARF  8
+#define FACEWHISPERER 9
 
 //HAL_TYPE Define Types
 #define HAL_avr 1

@@ -15,9 +15,10 @@ else
 endif
 
 ifeq ($(HAL),xmega)
- VPATH=$(HALPATH)/xmega
+ VPATH=$(HALPATH)/xmega $(HALPATH)/usbhost
+ EXTRAINCDIRS += $(HALPATH)/xmega $(HALPATH)/usbhost
  HALSRC = XMEGA_AES_driver.c uart.c usart_driver.c xmega_hal.c
- EXTRAINCDIRS += $(HALPATH)/xmega
+ USBSRC = Usb.cpp
 else
  $(error: Unknown HAL: $(HAL))
 endif

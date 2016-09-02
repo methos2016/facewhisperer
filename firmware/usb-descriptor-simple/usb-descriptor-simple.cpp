@@ -1,0 +1,23 @@
+#include "hal.h"
+#include "Usb.h"
+#include <stdint.h>
+#include <stdlib.h>
+
+USB  Usb;
+
+
+int main()
+{
+	platform_init();
+	init_uart();
+	trigger_setup();
+	Usb.Task();
+
+	while () {
+		trigger_high();
+		trigger_low();
+	}
+
+	return 0;
+}
+

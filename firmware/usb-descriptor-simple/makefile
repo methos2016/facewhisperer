@@ -59,7 +59,7 @@ include $(HALPATH)/PLATFORM_INCLUDE.mk
 FORMAT = ihex
 
 # Target file name (without extension).
-TARGET = simpleserial-base
+TARGET = usb-descriptor-simple
 
 # Object files directory
 #     To put object files in current directory, use a dot (.), do NOT make
@@ -67,10 +67,10 @@ TARGET = simpleserial-base
 OBJDIR = objdir
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c $(HALSRC)
+SRC = $(HALSRC)
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = 
+CPPSRC = $(TARGET).cpp $(USBSRC)
 
 
 # List Assembler source files here.
