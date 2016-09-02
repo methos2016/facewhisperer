@@ -9,12 +9,21 @@ USB  Usb;
 int main()
 {
 	platform_init();
-	init_uart();
 	trigger_setup();
 
-	Serial.print("Does this work?");
+    Serial.begin(38400);
+	Serial.print("Hello World\n");
+
+	pinMode(18, OUTPUT);
+	pinMode(19, OUTPUT);
+	digitalWrite(18, HIGH);
+	digitalWrite(19, HIGH);
+	digitalWrite(18, LOW);
+	digitalWrite(19, LOW);
 
 	Usb.Task();
+
+	Serial.print("Made it through USB\n");
 
 	while (1) {
 		trigger_high();
