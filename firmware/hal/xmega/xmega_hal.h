@@ -39,6 +39,7 @@
 #if PLATFORM == FACEWHISPERER
 #define led_error(a) if (a) {PORTA.OUTCLR = PIN6_bm;} else {PORTA.OUTSET = PIN6_bm;}
 #define led_ok(a) if (a) {PORTA.OUTCLR = PIN5_bm;} else {PORTA.OUTSET = PIN5_bm;}
+#define sync_to_posedge() xmega_comparator_sync(AC_MUXPOS_PIN4_gc, AC_INTMODE_RISING_gc, 250)
 #endif
 
 #if PLATFORM == FACEWHISPERER
@@ -47,6 +48,8 @@ void reset_usb();
 #endif
 
 void reset_xmega();
+
+void xmega_comparator_sync(AC_MUXPOS_t pin, AC_INTMODE_t edge, int millivolts);
 
 void HW_AES128_Init(void);
 void HW_AES128_LoadKey(uint8_t * key);

@@ -15,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#include <avr/sleep.h>
 #include "hal.h"
 #include "xmega_hal.h"
 
@@ -81,6 +83,44 @@ void reset_xmega()
     cli();
     CCP = 0xD8;
     RST.CTRL = RST_SWRST_bm;
+}
+
+
+static volatile bool aca_ac0_flag ;
+
+ISR(ACA_AC0_vect)
+{
+    aca_ac0_flag = true;
+}
+
+void xmega_comparator_sync(AC_MUXPOS_t pin, AC_INTMODE_t edge, int millivolts)
+{
+    // Use the Analog Comparator unit to wait for an edge
+    // with low jitter and a programmable threshold.
+
+    // Input is in millivolts for convenience; convert
+    // to the nearest level in the Vcc/64 divider network.
+    int scalefac = (millivolts * 10000000UL + 257812UL) / 515625UL;
+    if (scalefac < 1) scalefac = 1;
+    if (scalefac > 64) scalefac = 64;
+    ACA.CTRLB = scalefac - 1;
+
+    set_sleep_mode(SLEEP_MODE_IDLE);
+    sleep_enable();
+
+    ACA.CTRLA = 0;
+    ACA.WINCTRL = 0;
+    ACA.AC0MUXCTRL = pin | AC_MUXNEG_SCALER_gc;
+    ACA.AC0CTRL = edge | AC_INTLVL_HI_gc | AC_HYSMODE_SMALL_gc | AC_ENABLE_bm;
+    aca_ac0_flag = false;
+
+    // Go into idle sleep (with peripherals all enabled) to resume with predictable latency
+    while (!aca_ac0_flag) {
+        sleep_cpu();
+    }
+
+    ACA.AC0CTRL = 0;
+    sleep_disable();
 }
 
 

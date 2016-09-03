@@ -13,20 +13,25 @@ int main()
     Serial.begin(38400);
     Serial.println("Ready to experiment!");
 
-    reset_usb();
-
     // Pull the target reset low; actual reset can take a somewhat unpredictable amount of time,
     // both due to the capacitance of the RST line charging, and the CPU starting up from an
     // internal 8 MHz oscillator
     reset_target();
 
+    // Resynchronize with the target using a GPIO signal it asserts after booting
+    sync_to_posedge();
+    trigger_high();
+
+    // Start up the USB clocks only after sync'ing with the target
+    reset_usb();
     Usb.Init();
 
     // Wait until the device has been found and addressed
     do {
         led_error(1);
         Usb.Task();
-        if (Usb.getUsbTaskState() == USB_STATE_ERROR) {
+        if (Usb.getUsbTaskState() == USB_STATE_ERROR ||
+            Usb.getUsbTaskState() == USB_STATE_DETACHED) {
             reset_xmega();
         }
         led_error(0);
@@ -38,7 +43,6 @@ int main()
 
     // Try to do a ridiculous long descriptor read, and dump whatever we get back.
     memset(buffer, 0, sizeof buffer);
-    trigger_high();
     int result = Usb.getConfDescr(1, 0, sizeof buffer, 0, buffer);
     trigger_low();
 
