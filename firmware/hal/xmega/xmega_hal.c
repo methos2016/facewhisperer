@@ -19,7 +19,7 @@
 #include "xmega_hal.h"
 
 void platform_init(void)
-{  
+{
 
  #if PLATFORM == FACEWHISPERER
     // Let Arduino lib do its early init first
@@ -29,17 +29,17 @@ void platform_init(void)
     OSC.XOSCCTRL = 0x00;
     OSC.PLLCTRL = 0x00;
     OSC.CTRL |= OSC_XOSCEN_bm;
-    
+
     //wait for clock
     while((OSC.STATUS & OSC_XOSCRDY_bm) == 0);
-    
+
     //Switch clock source
     CCP = CCP_IOREG_gc;
-    CLK.CTRL = CLK_SCLKSEL_XOSC_gc;    
-    
-    //Turn off other sources besides external    
+    CLK.CTRL = CLK_SCLKSEL_XOSC_gc;
+
+    //Turn off other sources besides external
     OSC.CTRL = OSC_XOSCEN_bm;
-    
+
  #if PLATFORM == CW303
     PORTA.DIRSET = PIN5_bm | PIN6_bm;
     PORTA.OUTSET = PIN5_bm | PIN6_bm;
@@ -49,8 +49,32 @@ void platform_init(void)
     PORTA.DIRSET = PIN5_bm | PIN6_bm | PIN7_bm;
     PORTA.OUTSET = PIN5_bm | PIN6_bm;
     trigger_setup();
+    reset_usb();
  #endif
 }
+
+#if PLATFORM == FACEWHISPERER
+void reset_target()
+{
+    // Pulse the target reset transistor
+    PORTA.OUTSET = PIN7_bm;
+    delayMicroseconds(1000);
+    PORTA.OUTCLR = PIN7_bm;
+}
+
+void reset_usb()
+{
+    // Max3241e hardware reset
+    PORTC.DIRSET = PIN1_bm;
+    PORTC.OUTCLR = PIN1_bm;
+    delayMicroseconds(20);
+
+    // Leave RST with a pull-up
+    PORTC.PIN1CTRL |= PORT_OPC_PULLUP_gc;
+    PORTC.DIRCLR = PIN1_bm;
+}
+#endif
+
 
 #if HWCRYPTO
 #include "XMEGA_AES_driver.h"

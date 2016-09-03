@@ -4,43 +4,47 @@
 #include <stdlib.h>
 
 USB  Usb;
+uint8_t buffer[4096];
+
 
 
 int main()
 {
 	platform_init();
-	trigger_setup();
-
     Serial.begin(38400);
-	Serial.print("Hello World\n");
 
-	pinMode(18, OUTPUT);
-	pinMode(19, OUTPUT);
-	digitalWrite(18, HIGH);
-	digitalWrite(19, HIGH);
-	digitalWrite(18, LOW);
-	digitalWrite(19, LOW);
+	Serial.println("Ready!");
 
-	Usb.Task();
+	SPI.begin();
+	while (1) {
+		reset_target();
 
-	Serial.print("Made it through USB\n");
+		led_error(1);
+		SPI.transfer(0x55);
+		led_error(0);
 
-	led_ok(1);
+		led_ok(1);
+		delay(100);
+		led_ok(0);
+	}
+
+	Usb.Init();
+	Serial.println(Usb.getVbusState());
 
 	while (1) {
-		
-		for (int i = 0; i < 100; i++) {
-			trigger_high();
-			trigger_low();
-		}
-
-		reset_gate(1);
-		delay(1);
-		reset_gate(0);
-
-		delay(100);
-
+		Usb.Task();
+//		Serial.println(Usb.getUsbTaskState());
 	}
+
+	// if (result < 0) {
+	// 	led_error(1);
+	// } else {
+	// 	led_ok(1);
+	// }
+
+	// while (1) {
+	// 	Usb.Task();
+	// }
 
 	return 0;
 }

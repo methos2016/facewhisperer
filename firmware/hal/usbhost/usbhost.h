@@ -50,12 +50,12 @@ public:
         static void init() {
                 // Should be initialized by the user manually for now
         }
-#elif !defined(SPDR)
+#elif !defined(SPDR) || defined(__AVR_XMEGA__)
         static void init() {
                 SPI_SS::SetDirWrite();
                 SPI_SS::Set();
                 SPI.begin();
-#if defined(__MIPSEL__)
+#if defined(__MIPSEL__) || defined(__AVR_XMEGA__)
                 SPI.setClockDivider(1);
 #elif defined(__ARDUINO_X86__)
                 #ifdef SPI_CLOCK_1M // Hack used to check if setClockSpeed is available

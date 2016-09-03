@@ -39,8 +39,13 @@
 #if PLATFORM == FACEWHISPERER
 #define led_error(a) if (a) {PORTA.OUTCLR = PIN6_bm;} else {PORTA.OUTSET = PIN6_bm;}
 #define led_ok(a) if (a) {PORTA.OUTCLR = PIN5_bm;} else {PORTA.OUTSET = PIN5_bm;}
-#define reset_gate(a) if (a) {PORTA.OUTSET = PIN7_bm;} else {PORTA.OUTCLR = PIN7_bm;}
 #endif
+
+#if PLATFORM == FACEWHISPERER
+void reset_target();
+void reset_usb();
+#endif
+
 
 void HW_AES128_Init(void);
 void HW_AES128_LoadKey(uint8_t * key);

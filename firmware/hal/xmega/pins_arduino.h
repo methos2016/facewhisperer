@@ -39,10 +39,10 @@
 #define analogInputToDigitalPin(p)  ((p < 6) ? (p) + 22 : -1)
 #define digitalPinHasPWM(p)         (((p) >= 2 && (p) <= 6) || ((p) >= 9 && (p)<= 11) || ((p) >= 14 && (p)<= 19))
 
-static const uint8_t SS    = 6;
-static const uint8_t MOSI  = 11;
-static const uint8_t MISO  = 12;
-static const uint8_t SCK   = 13;
+static const uint8_t SS    = 9;
+static const uint8_t MOSI  = 10;
+static const uint8_t MISO  = 20;
+static const uint8_t SCK   = 21;
 
 static const uint8_t SDA = 2;
 static const uint8_t SCL = 3;
@@ -58,7 +58,7 @@ static const uint8_t A5 = 27;
 #define Wire xmWireC
 #define Wire1 xmWireE
 
-#define SPI_PORT	SPID
+#define SPI_PORT	SPIC
 
 #define digitalPinToPCICR(p)    (((p) >= 0 && (p) <= 21) ? (&PCICR) : ((uint8_t *)0))
 #define digitalPinToPCICRbit(p) (((p) <= 7) ? 2 : (((p) <= 13) ? 0 : 1))
