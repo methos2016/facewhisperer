@@ -46,6 +46,7 @@ void reset_target();
 void reset_usb();
 #endif
 
+void reset_xmega();
 
 void HW_AES128_Init(void);
 void HW_AES128_LoadKey(uint8_t * key);

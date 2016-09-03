@@ -76,6 +76,14 @@ void reset_usb()
 #endif
 
 
+void reset_xmega()
+{
+    cli();
+    CCP = 0xD8;
+    RST.CTRL = RST_SWRST_bm;
+}
+
+
 #if HWCRYPTO
 #include "XMEGA_AES_driver.h"
 static uint8_t enckey[16];
