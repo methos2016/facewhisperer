@@ -86,7 +86,7 @@ void reset_xmega()
 }
 
 
-static volatile bool aca_ac0_flag ;
+static volatile bool aca_ac0_flag;
 
 ISR(ACA_AC0_vect)
 {
@@ -115,9 +115,9 @@ void xmega_comparator_sync(AC_MUXPOS_t pin, AC_INTMODE_t edge, int millivolts)
     aca_ac0_flag = false;
 
     // Go into idle sleep (with peripherals all enabled) to resume with predictable latency
-    while (!aca_ac0_flag) {
+    do {
         sleep_cpu();
-    }
+    } while (!aca_ac0_flag);
 
     ACA.AC0CTRL = 0;
     sleep_disable();
