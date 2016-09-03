@@ -19,7 +19,9 @@ int main()
 
 	// Wait until the device has been found and addressed
 	do {
+		led_error(1);
 		Usb.Task();
+		led_error(0);
 	} while (Usb.getUsbTaskState() != USB_STATE_RUNNING);
 
 	led_ok(1);
@@ -29,7 +31,9 @@ int main()
 
 	// Try to do a ridiculous long descriptor read, and hexdump whatever we get back.
 	memset(buffer, 0, sizeof buffer);
+	trigger_high();
 	int result = Usb.getConfDescr(1, 0, sizeof buffer, 0, buffer);
+	trigger_low();
 
 	// ctrlReq doesn't tell us how many IN packets we got back successfully,
 	// so to keep the output concise we'll just dump everything save for trailing zeroes.
