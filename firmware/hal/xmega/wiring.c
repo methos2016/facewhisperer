@@ -354,14 +354,14 @@ void init()
 	do {
 		/* Wait until RTC is not busy. */
 	} while (  RTC.STATUS & RTC_SYNCBUSY_bm );
-	
+
 	/* Configure RTC period to 1 millisecond. */
 	RTC.PER = 0;//1ms
 	RTC.CNT = 0;
 	RTC.COMP = 0;
 	RTC.CTRL = ( RTC.CTRL & ~RTC_PRESCALER_gm ) | RTC_PRESCALER_DIV1_gc;
 
-	/* Enable overflow interrupt. */	
+	/* Enable overflow interrupt. */
 	RTC.INTCTRL = ( RTC.INTCTRL & ~( RTC_COMPINTLVL_gm | RTC_OVFINTLVL_gm ) ) |
 	              RTC_OVFINTLVL_LO_gc |
 	              RTC_COMPINTLVL_OFF_gc;

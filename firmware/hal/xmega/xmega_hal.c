@@ -20,6 +20,12 @@
 
 void platform_init(void)
 {  
+
+ #if PLATFORM == FACEWHISPERER
+    // Let Arduino lib do its early init first
+    init();
+ #endif
+
     OSC.XOSCCTRL = 0x00;
     OSC.PLLCTRL = 0x00;
     OSC.CTRL |= OSC_XOSCEN_bm;
@@ -36,6 +42,11 @@ void platform_init(void)
     
  #if PLATFORM == CW303
     PORTA.DIRSET = PIN5_bm | PIN6_bm;
+    PORTA.OUTSET = PIN5_bm | PIN6_bm;
+ #endif
+
+ #if PLATFORM == FACEWHISPERER
+    PORTA.DIRSET = PIN5_bm | PIN6_bm | PIN7_bm;
     PORTA.OUTSET = PIN5_bm | PIN6_bm;
  #endif
 }

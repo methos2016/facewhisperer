@@ -25,9 +25,21 @@ int main()
 
 	Serial.print("Made it through USB\n");
 
+	led_ok(1);
+
 	while (1) {
-		trigger_high();
-		trigger_low();
+		
+		for (int i = 0; i < 100; i++) {
+			trigger_high();
+			trigger_low();
+		}
+
+		reset_gate(1);
+		delay(1);
+		reset_gate(0);
+
+		delay(100);
+
 	}
 
 	return 0;
