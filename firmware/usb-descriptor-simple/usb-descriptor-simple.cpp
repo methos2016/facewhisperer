@@ -14,16 +14,23 @@ int main()
     Serial.println("Ready to experiment!");
 
     reset_usb();
+
+    // Pull the target reset low; actual reset can take a somewhat unpredictable amount of time,
+    // both due to the capacitance of the RST line charging, and the CPU starting up from an
+    // internal 8 MHz oscillator
     reset_target();
+
     Usb.Init();
 
     // Wait until the device has been found and addressed
     do {
         led_error(1);
         Usb.Task();
+        if (Usb.getUsbTaskState() == USB_STATE_ERROR) {
+            reset_xmega();
+        }
         led_error(0);
     } while (Usb.getUsbTaskState() != USB_STATE_RUNNING);
-
     led_ok(1);
 
     // Set a small NAK limit for EP0, so we fail faster if/when the device NAKs
