@@ -20,7 +20,6 @@ int main()
 
     // Resynchronize with the target using a GPIO signal it asserts after booting
     sync_to_posedge();
-    trigger_high();
 
     // Start up the USB clocks only after sync'ing with the target
     reset_usb();
@@ -43,6 +42,7 @@ int main()
 
     // Try to do a ridiculous long descriptor read, and dump whatever we get back.
     memset(buffer, 0, sizeof buffer);
+    trigger_high();
     int result = Usb.getConfDescr(1, 0, sizeof buffer, 0, buffer);
     trigger_low();
 

@@ -426,7 +426,6 @@ void USB::Task(void) //USB state machine
 {
         uint8_t rcode;
         uint8_t tmpdata;
-        static unsigned long delay = 0;
         //USB_DEVICE_DESCRIPTOR buf;
         bool lowspeed = false;
 
@@ -451,8 +450,7 @@ void USB::Task(void) //USB state machine
                         //intentional fallthrough
                 case FSHOST: //attached
                         if((usb_task_state & USB_STATE_MASK) == USB_STATE_DETACHED) {
-                                delay = millis() + USB_SETTLE_DELAY;
-                                usb_task_state = USB_ATTACHED_SUBSTATE_SETTLE;
+                                usb_task_state = USB_ATTACHED_SUBSTATE_RESET_DEVICE;
                         }
                         break;
         }// switch( tmpdata
@@ -475,10 +473,6 @@ void USB::Task(void) //USB state machine
                         break;
                 case USB_DETACHED_SUBSTATE_ILLEGAL: //just sit here
                         break;
-                case USB_ATTACHED_SUBSTATE_SETTLE: //settle time for just attached device
-                        if((long)(millis() - delay) >= 0L)
-                                usb_task_state = USB_ATTACHED_SUBSTATE_RESET_DEVICE;
-                        else break; // don't fall through
                 case USB_ATTACHED_SUBSTATE_RESET_DEVICE:
                         regWr(rHCTL, bmBUSRST); //issue bus reset
                         usb_task_state = USB_ATTACHED_SUBSTATE_WAIT_RESET_COMPLETE;
@@ -488,23 +482,13 @@ void USB::Task(void) //USB state machine
                                 tmpdata = regRd(rMODE) | bmSOFKAENAB; //start SOF generation
                                 regWr(rMODE, tmpdata);
                                 usb_task_state = USB_ATTACHED_SUBSTATE_WAIT_SOF;
-                                //delay = millis() + 20; //20ms wait after reset per USB spec
                         }
                         break;
                 case USB_ATTACHED_SUBSTATE_WAIT_SOF: //todo: change check order
                         if(regRd(rHIRQ) & bmFRAMEIRQ) {
-                                //when first SOF received _and_ 20ms has passed we can continue
-                                /*
-                                if (delay < millis()) //20ms passed
-                                        usb_task_state = USB_STATE_CONFIGURING;
-                                 */
-                                usb_task_state = USB_ATTACHED_SUBSTATE_WAIT_RESET;
-                                delay = millis() + 20;
+                                usb_task_state = USB_STATE_CONFIGURING;
                         }
                         break;
-                case USB_ATTACHED_SUBSTATE_WAIT_RESET:
-                        if((long)(millis() - delay) >= 0L) usb_task_state = USB_STATE_CONFIGURING;
-                        else break; // don't fall through
                 case USB_STATE_CONFIGURING:
 
                         //Serial.print("\r\nConf.LS: ");
@@ -800,10 +784,7 @@ uint8_t USB::getStrDescr(uint8_t addr, uint8_t ep, uint16_t ns, uint8_t index, u
 
 uint8_t USB::setAddr(uint8_t oldaddr, uint8_t ep, uint8_t newaddr) {
         uint8_t rcode = ctrlReq(oldaddr, ep, bmREQ_SET, USB_REQUEST_SET_ADDRESS, newaddr, 0x00, 0x0000, 0x0000, 0x0000, NULL, NULL);
-        //delay(2); //per USB 2.0 sect.9.2.6.3
-        delay(300); // Older spec says you should wait at least 200ms
         return rcode;
-        //return ( ctrlReq(oldaddr, ep, bmREQ_SET, USB_REQUEST_SET_ADDRESS, newaddr, 0x00, 0x0000, 0x0000, 0x0000, NULL, NULL));
 }
 //set configuration
 
