@@ -48,6 +48,7 @@ void platform_init(void)
  #if PLATFORM == FACEWHISPERER
     PORTA.DIRSET = PIN5_bm | PIN6_bm | PIN7_bm;
     PORTA.OUTSET = PIN5_bm | PIN6_bm;
+    trigger_setup();
  #endif
 }
 
