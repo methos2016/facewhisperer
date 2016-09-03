@@ -29,7 +29,7 @@ int main()
     // Set a small NAK limit for EP0, so we fail faster if/when the device NAKs
     Usb.getEpInfoEntry(1, 0)->bmNakPower = 4;
 
-    // Try to do a ridiculous long descriptor read, and hexdump whatever we get back.
+    // Try to do a ridiculous long descriptor read, and dump whatever we get back.
     memset(buffer, 0, sizeof buffer);
     trigger_high();
     int result = Usb.getConfDescr(1, 0, sizeof buffer, 0, buffer);
