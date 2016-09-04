@@ -29,8 +29,6 @@ int main()
     reset_usb();
     Usb.Init();
 
-    // Positive edge for ChipWhisperer
-    trigger_high();
     Serial.println();
 
     // Wait until the device has been found and addressed
@@ -52,6 +50,7 @@ int main()
 
     // Try to do a ridiculous long descriptor read, and dump whatever we get back.
     memset(buffer, 0, sizeof buffer);
+    trigger_high();
     int result = Usb.getConfDescr(1, 0, sizeof buffer, 0, buffer);
     trigger_low();
 
