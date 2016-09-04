@@ -89,7 +89,8 @@ typedef unsigned int word;
 typedef uint8_t boolean;
 typedef uint8_t byte;
 
-void init(void);
+void timer_init(void);
+void adc_init( ADC_t* adc );
 
 void pinMode(uint8_t, uint8_t);
 void digitalWrite(uint8_t, uint8_t);

@@ -22,24 +22,18 @@
 
 void platform_init(void)
 {
-
- #if PLATFORM == FACEWHISPERER
-    // Let Arduino lib do its early init first
-    init();
- #endif
-
     OSC.XOSCCTRL = 0x00;
     OSC.PLLCTRL = 0x00;
     OSC.CTRL |= OSC_XOSCEN_bm;
 
-    //wait for clock
+    // Wait for external clock
     while((OSC.STATUS & OSC_XOSCRDY_bm) == 0);
 
-    //Switch clock source
+    // Switch clock source
     CCP = CCP_IOREG_gc;
     CLK.CTRL = CLK_SCLKSEL_XOSC_gc;
 
-    //Turn off other sources besides external
+    // Turn off other sources besides external
     OSC.CTRL = OSC_XOSCEN_bm;
 
  #if PLATFORM == CW303
@@ -48,19 +42,22 @@ void platform_init(void)
  #endif
 
  #if PLATFORM == FACEWHISPERER
-    PORTA.DIRSET = PIN5_bm | PIN6_bm | PIN7_bm;
+    PORTA.DIRSET = PIN0_bm | PIN5_bm | PIN6_bm | PIN7_bm;
     PORTA.OUTSET = PIN5_bm | PIN6_bm;
-    trigger_setup();
-    reset_usb();
  #endif
+
+    // Enable interrupts.
+    PMIC.CTRL |= PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;
+    sei();
 }
 
 #if PLATFORM == FACEWHISPERER
 void reset_target()
 {
     // Pulse the target reset transistor
+    PORTA.DIRSET = PIN7_bm;
     PORTA.OUTSET = PIN7_bm;
-    delayMicroseconds(1000);
+    _delay_us(1000);
     PORTA.OUTCLR = PIN7_bm;
 }
 
@@ -69,7 +66,7 @@ void reset_usb()
     // Max3241e hardware reset
     PORTC.DIRSET = PIN1_bm;
     PORTC.OUTCLR = PIN1_bm;
-    delayMicroseconds(20);
+    _delay_us(20);
 
     // Leave RST with a pull-up
     PORTC.PIN1CTRL |= PORT_OPC_PULLUP_gc;

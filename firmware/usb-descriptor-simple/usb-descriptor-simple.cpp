@@ -10,8 +10,6 @@ uint8_t buffer[4096];
 int main()
 {
     platform_init();
-    Serial.begin(38400);
-    Serial.println("Ready to experiment!");
 
     // Pull the target reset low; actual reset can take a somewhat unpredictable amount of time,
     // both due to the capacitance of the RST line charging, and the CPU starting up from an
@@ -21,9 +19,14 @@ int main()
     // Resynchronize with the target using a GPIO signal it asserts after booting
     sync_to_posedge();
 
-    // Start up the USB clocks only after sync'ing with the target
+    // Initialize peripherals with timers only after sync'ing to the target
+    Serial.begin(38400);
+    timer_init();
     reset_usb();
     Usb.Init();
+
+    trigger_high();
+    Serial.println();
 
     // Wait until the device has been found and addressed
     do {
@@ -37,12 +40,13 @@ int main()
     } while (Usb.getUsbTaskState() != USB_STATE_RUNNING);
     led_ok(1);
 
+    Serial.write(0x03);
+
     // Set a small NAK limit for EP0, so we fail faster if/when the device NAKs
     Usb.getEpInfoEntry(1, 0)->bmNakPower = 4;
 
     // Try to do a ridiculous long descriptor read, and dump whatever we get back.
     memset(buffer, 0, sizeof buffer);
-    trigger_high();
     int result = Usb.getConfDescr(1, 0, sizeof buffer, 0, buffer);
     trigger_low();
 
@@ -54,11 +58,9 @@ int main()
         guessed_length--;
     }
 
-    Serial.print("code ");
+    Serial.write(0x04);
     Serial.println(result);
-    Serial.print("len ");
     Serial.println(guessed_length);
-    Serial.println("raw:");
     for (int i = 0; i < guessed_length; i++) {
         Serial.write(buffer[i]);
     }
