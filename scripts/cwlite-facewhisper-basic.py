@@ -54,14 +54,22 @@ class UserScript(UserScriptBase):
             ['OpenADC', 'Trigger Setup', 'Mode', 'rising edge'],
             ['OpenADC', 'Clock Setup', 'ADC Clock', 'Reset ADC DCM', None],
 
-            ['Generic Settings', 'Acquisition Settings', 'Number of Traces', 50],
+            ['Generic Settings', 'Acquisition Settings', 'Number of Traces', 500],
 
             ['CW Extra Settings', 'HS-Glitch Out Enable (Low Power)', True],
+            ['CW Extra Settings', 'HS-Glitch Out Enable (High Power)', True],
             ['Glitch Module', 'Clock Source', 'CLKGEN'],
             ['Glitch Module', 'Single-Shot Arm', 'Before Scope Arm'],
-            ['Glitch Module', 'Glitch Trigger', 'Ext Trigger:Continous'],
+            ['Glitch Module', 'Glitch Trigger', 'Ext Trigger:Single-Shot'],
             ['Glitch Module', 'Output Mode', 'Glitch Only'],
-            ['Glitch Explorer', 'Normal Response', u's.find("code 5 len 34 ") >= 0'],
+
+            ['Glitch Module', 'Glitch Width (as % of period)', 45.0],
+            ['Glitch Module', 'Glitch Offset (as % of period)', 14.0],
+            ['Glitch Module', 'Repeat', 20],
+            ['Glitch Module', 'Ext Trigger Offset', 2400],
+
+            ['Glitch Explorer', 'Normal Response', u's.find("code 5 len 34 9 2 22 0 1 1 0 80 28 9 4 0 0 1 3 1 2 0 9 21") >= 0'],
+
             ]:
             self.api.setParameter(cmd)
 
