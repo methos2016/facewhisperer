@@ -21,6 +21,15 @@ class UserScript(UserScriptBase):
 
         self.api.connect()
 
+        # Flash the firmware
+        xmega = XMEGAProgrammer()
+        xmega.setUSBInterface(self.api.getScope().scopetype.dev.xmega)
+        xmega.find()
+        xmega.erase()
+        xmega.program(r"usb-descriptor-simple.hex", memtype="flash", verify=True)
+        xmega.close()
+
+        # Capture parameters
         for cmd in [
             ['Simple Serial', 'Load Key Command', u''],
             ['Simple Serial', 'Go Command', u''],
@@ -34,9 +43,9 @@ class UserScript(UserScriptBase):
             ['OpenADC', 'Clock Setup', 'CLKGEN Settings', 'Desired Frequency', 12e6],
             ['OpenADC', 'Clock Setup', 'ADC Clock', 'Source', 'CLKGEN x4 via DCM'],
             ['OpenADC', 'Trigger Setup', 'Total Samples', 24400],
-            ['OpenADC', 'Trigger Setup', 'Pre-Trigger Samples', 8000],
-            ['OpenADC', 'Trigger Setup', 'Offset', 0],
-            ['OpenADC', 'Gain Setting', 'Setting', 45],
+            ['OpenADC', 'Trigger Setup', 'Pre-Trigger Samples', 0],
+            ['OpenADC', 'Trigger Setup', 'Offset', 14100],
+            ['OpenADC', 'Gain Setting', 'Setting', 38],
             ['OpenADC', 'Trigger Setup', 'Mode', 'rising edge'],
             ['OpenADC', 'Clock Setup', 'ADC Clock', 'Reset ADC DCM', None],
 
