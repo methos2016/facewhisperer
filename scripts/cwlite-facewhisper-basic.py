@@ -3,6 +3,11 @@
 from chipwhisperer.common.api.CWCoreAPI import CWCoreAPI
 from chipwhisperer.common.scripts.base import UserScriptBase
 from chipwhisperer.capture.api.programmers import XMEGAProgrammer
+import os
+
+
+def getFirmwarePath(name):
+    return os.path.join(os.path.dirname(__file__), '../firmware/%s/%s.hex' % (name, name))
 
 
 class UserScript(UserScriptBase):
@@ -26,14 +31,14 @@ class UserScript(UserScriptBase):
         xmega.setUSBInterface(self.api.getScope().scopetype.dev.xmega)
         xmega.find()
         xmega.erase()
-        xmega.program(r"usb-descriptor-simple.hex", memtype="flash", verify=True)
+        xmega.program(getFirmwarePath('usb-descriptor-simple'), memtype='flash', verify=True)
         xmega.close()
 
         # Capture parameters
         for cmd in [
             ['Simple Serial', 'Load Key Command', u''],
-            ['Simple Serial', 'Go Command', u''],
-            ['Simple Serial', 'Output Format', u''],
+            ['Simple Serial', 'Go Command', u'\n'],
+            ['Simple Serial', 'Output Format', u'$GLITCH$'],
 
             ['CW Extra Settings', 'Trigger Pins', 'Target IO4 (Trigger Line)', True],
             ['CW Extra Settings', 'Target IOn Pins', 'Target IO1', 'Serial RXD'],
@@ -50,6 +55,13 @@ class UserScript(UserScriptBase):
             ['OpenADC', 'Clock Setup', 'ADC Clock', 'Reset ADC DCM', None],
 
             ['Generic Settings', 'Acquisition Settings', 'Number of Traces', 50],
+
+            ['CW Extra Settings', 'HS-Glitch Out Enable (Low Power)', True],
+            ['Glitch Module', 'Clock Source', 'CLKGEN'],
+            ['Glitch Module', 'Single-Shot Arm', 'Before Scope Arm'],
+            ['Glitch Module', 'Glitch Trigger', 'Ext Trigger:Continous'],
+            ['Glitch Module', 'Output Mode', 'Glitch Only'],
+            ['Glitch Explorer', 'Normal Response', u's.find("code 5 len 34 ") >= 0'],
             ]:
             self.api.setParameter(cmd)
 

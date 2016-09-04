@@ -11,6 +11,11 @@ int main()
 {
     platform_init();
 
+    // Wait for a "go" signal from the host.
+    Serial.begin(38400);
+    Serial.println("Waiting");
+    while (Serial.read() != '\n');
+
     // Pull the target reset low; actual reset can take a somewhat unpredictable amount of time,
     // both due to the capacitance of the RST line charging, and the CPU starting up from an
     // internal 8 MHz oscillator
@@ -24,7 +29,6 @@ int main()
 
     // Initialize peripherals with timers only after sync'ing to the target,
     // to avoid introducing additional jitter any time we access one of these modules.
-    Serial.begin(38400);
     timer_init();
     reset_usb();
     Usb.Init();
@@ -43,8 +47,6 @@ int main()
     } while (Usb.getUsbTaskState() != USB_STATE_RUNNING);
     led_ok(1);
 
-    Serial.write(0x03);
-
     // Set a small NAK limit for EP0, so we fail faster if/when the device NAKs
     Usb.getEpInfoEntry(1, 0)->bmNakPower = 4;
 
@@ -62,12 +64,20 @@ int main()
         guessed_length--;
     }
 
-    Serial.write(0x04);
-    Serial.println(result);
-    Serial.println(guessed_length);
+    // Result metadata
+    Serial.print("code ");
+    Serial.print(result);
+    Serial.print(" len ");
+    Serial.print(guessed_length);
+
+    // Result packet, in hex
     for (int i = 0; i < guessed_length; i++) {
-        Serial.write(buffer[i]);
+        Serial.print(" ");
+        Serial.print(buffer[i], HEX);
     }
+
+    // End of experiment
+    Serial.println();
 
     // Start over with a software reset
     reset_xmega();
