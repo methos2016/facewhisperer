@@ -16,15 +16,20 @@ int main()
     // internal 8 MHz oscillator
     reset_target();
 
+    // Make sure reset has been asserted and I/Os have settled before sync'ing
+    _delay_ms(10);
+
     // Resynchronize with the target using a GPIO signal it asserts after booting
     sync_to_posedge();
 
-    // Initialize peripherals with timers only after sync'ing to the target
+    // Initialize peripherals with timers only after sync'ing to the target,
+    // to avoid introducing additional jitter any time we access one of these modules.
     Serial.begin(38400);
     timer_init();
     reset_usb();
     Usb.Init();
 
+    // Positive edge for ChipWhisperer
     trigger_high();
     Serial.println();
 
