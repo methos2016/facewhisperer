@@ -38,7 +38,8 @@ class UserScript(UserScriptBase):
         for cmd in [
             ['Simple Serial', 'Load Key Command', u''],
             ['Simple Serial', 'Go Command', u'\n'],
-            ['Simple Serial', 'Output Format', u'$GLITCH$4200'],
+            ['Simple Serial', 'Output Format', u'$GLITCH$8000'],
+            ['Simple Serial', 'NewAE USB (CWLite/CW1200)', 'baud', 115200],
 
             ['CW Extra Settings', 'Trigger Pins', 'Target IO4 (Trigger Line)', True],
             ['CW Extra Settings', 'Target IOn Pins', 'Target IO1', 'Serial RXD'],

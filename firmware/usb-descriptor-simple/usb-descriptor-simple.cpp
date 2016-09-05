@@ -12,7 +12,7 @@ int main()
     platform_init();
 
     // Wait for a "go" signal from the host.
-    Serial.begin(38400);
+    Serial.begin(115200);
     Serial.println("Waiting");
     while (Serial.read() != '\n');
 
@@ -69,11 +69,13 @@ int main()
     Serial.print(result);
     Serial.print(" len ");
     Serial.print(guessed_length);
+    Serial.print(" ");
 
     // Result packet, in hex
     for (int i = 0; i < guessed_length; i++) {
         Serial.print(" ");
-        Serial.print(buffer[i], HEX);
+        Serial.print(buffer[i] >> 4, HEX);
+        Serial.print(buffer[i] & 0xF, HEX);
     }
 
     // End of experiment
