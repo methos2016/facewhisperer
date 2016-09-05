@@ -39,7 +39,7 @@ int main()
 
     // Try to do a descriptor read that we can glitch into something else, and stream each received IN packet back to the host
     trigger_high();
-    streaming_ctrl_read(1, 0, bmREQ_GET_DESCR, USB_REQUEST_GET_DESCRIPTOR, 0, USB_DESCRIPTOR_CONFIGURATION, 0x0000, 4096);
+    streaming_ctrl_read(1, 0, bmREQ_GET_DESCR, USB_REQUEST_GET_DESCRIPTOR, 0, USB_DESCRIPTOR_CONFIGURATION, 0x0000, 0xffff);
     trigger_low();
 
     // Start over with a software reset
