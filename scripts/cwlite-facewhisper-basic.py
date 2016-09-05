@@ -68,8 +68,9 @@ class UserScript(UserScriptBase):
             ['Glitch Module', 'Repeat', 20],
             ['Glitch Module', 'Ext Trigger Offset', 2400],
 
+            # Fixme: these are specific to the target device I'm experimenting on
             ['Glitch Explorer', 'Normal Response', u's.find("code 5 len 34 9 2 22 0 1 1 0 80 28 9 4 0 0 1 3 1 2 0 9 21") >= 0'],
-            ['Glitch Explorer', 'Successful Response', u"int(s.split('len ')[-1].split()[0]) > 34"],
+            ['Glitch Explorer', 'Successful Response', u"(lambda n: n.isdigit() and int(n))(s.split('len ')[-1].split()[0]) > 34"],
             ]:
             self.api.setParameter(cmd)
 
