@@ -38,7 +38,7 @@ class UserScript(UserScriptBase):
         for cmd in [
             ['Simple Serial', 'Load Key Command', u''],
             ['Simple Serial', 'Go Command', u'\n'],
-            ['Simple Serial', 'Output Format', u'$GLITCH$'],
+            ['Simple Serial', 'Output Format', u'$GLITCH$4200'],
 
             ['CW Extra Settings', 'Trigger Pins', 'Target IO4 (Trigger Line)', True],
             ['CW Extra Settings', 'Target IOn Pins', 'Target IO1', 'Serial RXD'],
@@ -63,14 +63,14 @@ class UserScript(UserScriptBase):
             ['Glitch Module', 'Glitch Trigger', 'Ext Trigger:Single-Shot'],
             ['Glitch Module', 'Output Mode', 'Glitch Only'],
 
-            ['Glitch Module', 'Glitch Width (as % of period)', 45.0],
-            ['Glitch Module', 'Glitch Offset (as % of period)', 14.0],
-            ['Glitch Module', 'Repeat', 20],
-            ['Glitch Module', 'Ext Trigger Offset', 2400],
+            ['Glitch Module', 'Glitch Width (as % of period)', 44.4],
+            ['Glitch Module', 'Glitch Offset (as % of period)', 5.3],
+            ['Glitch Module', 'Repeat', 2],
+            ['Glitch Module', 'Ext Trigger Offset', 7218],
 
             # Fixme: these are specific to the target device I'm experimenting on
             ['Glitch Explorer', 'Normal Response', u's.find("code 5 len 34 9 2 22 0 1 1 0 80 28 9 4 0 0 1 3 1 2 0 9 21") >= 0'],
-            ['Glitch Explorer', 'Successful Response', u"(lambda n: n.isdigit() and int(n))(s.split('len ')[-1].split()[0]) > 34"],
+            ['Glitch Explorer', 'Successful Response', u"(lambda n: n.isdigit() and int(n))((s+' x').split('len ')[-1].split()[0]) > 34"],
             ]:
             self.api.setParameter(cmd)
 
